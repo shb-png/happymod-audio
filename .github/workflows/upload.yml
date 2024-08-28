@@ -1,4 +1,4 @@
-name: Upload Audio Files
+name: Update Audio File
 
 on:
   push:
@@ -15,22 +15,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: '3.x'
+      - name: Set up GitHub CLI
+        uses: cli/cli@v3
 
-      - name: Install GitHub CLI
-        run: sudo apt-get install gh
+      - name: Authenticate with GitHub CLI
+        run: echo "${{ secrets.GH_TOKEN }}" | gh auth login --with-token
 
-      - name: Upload Audio File
+      - name: Update audio file
         run: |
-          gh auth login --with-token < ${{ secrets.GITHUB_TOKEN }}
-          gh repo clone happymod-audio
-          cp C:\Users\KBSS\Downloads\HappyModBetter\src\main\resources\test_audio.wav
-          cd happymod-audio
+          echo "Updating audio file" > audiofile.txt
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add .
-          git commit -m "Add new audio file"
+          git commit -m "Update audio file"
           git push
